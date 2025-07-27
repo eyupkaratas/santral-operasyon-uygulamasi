@@ -1,4 +1,5 @@
 import { SignInForm } from "@/components/sign-in-form";
+import ThemeToggler from "@/components/theme-toggler";
 import Image from "next/image";
 
 export default function Page() {
@@ -10,6 +11,9 @@ export default function Page() {
           <p className="text-base font-semibold">Santral Operasyon Uygulaması</p>
         </div>
         <SignInForm />
+        <div className="flex w-full justify-center">
+          <ThemeToggler />
+        </div>
       </div>
     </div>
   );
