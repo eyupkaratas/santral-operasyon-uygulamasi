@@ -46,7 +46,7 @@ export function SignInForm({ className, ...props }: React.ComponentProps<"div">)
                       <div className="grid gap-3">
                         <FormLabel>E-Posta</FormLabel>
                         <FormControl>
-                          <Input placeholder="eyup.karatas@manisa.brb.tr" {...field} />
+                          <Input placeholder="eyup.karatas@manisa.bsb.tr" {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>
