@@ -1,2 +1,2 @@
 cd client
-npx lint-staged
+pnpm dlx lint-staged
