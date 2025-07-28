@@ -1,0 +1,145 @@
+"use client";
+
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { ChevronRight, Menu } from "lucide-react";
+import Link from "next/link";
+import ThemeToggler from "./theme-toggler";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "./ui/navigation-menu";
+
+const navLinks = [
+  { href: "#", label: "Birimler" },
+  {
+    label: "Talep",
+    submenu: true,
+    items: [
+      { href: "", label: "Taleplerim" },
+      { href: "#", label: "Talep Oluştur" },
+    ],
+  },
+  {
+    label: "Kargo",
+    submenu: true,
+    items: [
+      { href: "", label: "Kargolarım" },
+      { href: "#", label: "Kargo Girişi" },
+    ],
+  },
+  {
+    label: "Randevu",
+    submenu: true,
+    items: [
+      { href: "", label: "Randevularım" },
+      { href: "#", label: "Randevu Oluştur" },
+    ],
+  },
+  {
+    label: "Numara",
+    submenu: true,
+    items: [
+      { href: "", label: "Numara Kaydı" },
+      { href: "#", label: "Numara Arama" },
+    ],
+  },
+];
+
+export default function Header() {
+  return (
+    <header className="w-full border-b">
+      <div className="container mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
+        {/* Logo */}
+        <Link href="/profil" className="text-xl font-bold">
+          ABC
+        </Link>
+
+        {/* Desktop Navigation */}
+        <NavigationMenu className="hidden gap-2 md:flex" viewport={false}>
+          <NavigationMenuList className="gap-2">
+            {navLinks.map((navLink, index) => (
+              <NavigationMenuItem key={index}>
+                {navLink.submenu ? (
+                  <>
+                    <NavigationMenuTrigger className="px-2 py-1.5 font-medium">{navLink.label}</NavigationMenuTrigger>
+                    <NavigationMenuContent className="data-[motion=from-end]:slide-in-from-right-16! data-[motion=from-start]:slide-in-from-left-16! data-[motion=to-end]:slide-out-to-right-16! data-[motion=to-start]:slide-out-to-left-16! z-50 p-1">
+                      <ul className="min-w-36">
+                        {navLink.items.map((item, index) => (
+                          <li key={index}>
+                            <NavigationMenuLink href={item.href} className="py-1.5 font-medium">
+                              {item.label}
+                            </NavigationMenuLink>
+                          </li>
+                        ))}
+                      </ul>
+                    </NavigationMenuContent>
+                  </>
+                ) : (
+                  <NavigationMenuLink href={navLink.href} className="px-2 py-1.5 font-medium">
+                    {navLink.label}
+                  </NavigationMenuLink>
+                )}
+              </NavigationMenuItem>
+            ))}
+          </NavigationMenuList>
+
+          <ThemeToggler />
+        </NavigationMenu>
+
+        {/* Mobile Navigation */}
+        <div className="md:hidden">
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <Menu className="h-6 w-6" />
+              </Button>
+            </SheetTrigger>
+
+            <SheetContent side="left" className="w-64 p-6">
+              <div className="flex items-center justify-between p-2">
+                <SheetTitle>Menü</SheetTitle>
+                <ThemeToggler />
+              </div>
+
+              <div className="space-y-2">
+                {navLinks.map((navLink, index) => (
+                  <div key={index}>
+                    {navLink.submenu ? (
+                      <details className="group">
+                        <summary className="flex items-center justify-between rounded px-2 py-1.5 font-medium">
+                          {navLink.label}
+                          <span className="transition-transform group-open:rotate-90">
+                            <ChevronRight width={16} height={16} />
+                          </span>
+                        </summary>
+
+                        <ul className="mt-2 ml-4 space-y-1">
+                          {navLink.items.map((item, idx) => (
+                            <li key={idx}>
+                              <Link href={item.href} className="block rounded px-2 py-1 font-medium">
+                                {item.label}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </details>
+                    ) : (
+                      <Link href={navLink.href!} className="block rounded px-2 py-1.5 font-medium">
+                        {navLink.label}
+                      </Link>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
+      </div>
+    </header>
+  );
+}
