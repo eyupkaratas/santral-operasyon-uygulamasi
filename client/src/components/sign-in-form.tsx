@@ -12,7 +12,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 
 const formSchema = z.object({
   email: z.email({ error: "Geçersiz e-posta adresi." }),
-  password: z.string(),
+  password: z.string().nonempty({ message: "Lütfen bir şifre girin." }),
 });
 
 export function SignInForm({ className, ...props }: React.ComponentProps<"div">) {
