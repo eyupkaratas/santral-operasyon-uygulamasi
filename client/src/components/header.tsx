@@ -15,37 +15,37 @@ import {
 } from "./ui/navigation-menu";
 
 const navLinks = [
-  { href: "#", label: "Birimler" },
+  { href: "/birimler", label: "Birimler" },
   {
     label: "Talep",
     submenu: true,
     items: [
-      { href: "", label: "Taleplerim" },
-      { href: "#", label: "Talep Oluştur" },
+      { href: "/taleplerim", label: "Taleplerim" },
+      { href: "/talep-olustur", label: "Talep Oluştur" },
     ],
   },
   {
     label: "Kargo",
     submenu: true,
     items: [
-      { href: "", label: "Kargolarım" },
-      { href: "#", label: "Kargo Girişi" },
+      { href: "/kargolarim", label: "Kargolarım" },
+      { href: "/kargo-girisi", label: "Kargo Girişi" },
     ],
   },
   {
     label: "Randevu",
     submenu: true,
     items: [
-      { href: "", label: "Randevularım" },
-      { href: "#", label: "Randevu Oluştur" },
+      { href: "/randevularim", label: "Randevularım" },
+      { href: "/randevu-olustur", label: "Randevu Oluştur" },
     ],
   },
   {
     label: "Numara",
     submenu: true,
     items: [
-      { href: "", label: "Numara Kaydı" },
-      { href: "#", label: "Numara Arama" },
+      { href: "/numara-kaydi", label: "Numara Kaydı" },
+      { href: "/numara-arama", label: "Numara Arama" },
     ],
   },
 ];
