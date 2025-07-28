@@ -1,3 +1,9 @@
+import Profile from "@/components/profile";
+
 export default function Page() {
-  return <div>Profil</div>;
+  return (
+    <div className="w-full max-w-sm">
+      <Profile />
+    </div>
+  );
 }

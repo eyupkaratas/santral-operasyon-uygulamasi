@@ -6,9 +6,9 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="min-h-svh">
+    <div className="flex min-h-svh flex-col">
       <Header />
-      <main className="mx-auto max-w-7xl p-4">{children}</main>
+      <main className="flex flex-1 items-center justify-center p-4">{children}</main>
     </div>
   );
 }
