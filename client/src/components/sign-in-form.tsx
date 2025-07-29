@@ -1,14 +1,16 @@
 "use client";
 
+import { loginAction } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
+import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
-
-import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
   email: z.email({ error: "Geçersiz e-posta adresi." }),
@@ -16,6 +18,8 @@ const formSchema = z.object({
 });
 
 export function SignInForm({ className, ...props }: React.ComponentProps<"div">) {
+  const [isPending, startTransition] = useTransition();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -25,7 +29,18 @@ export function SignInForm({ className, ...props }: React.ComponentProps<"div">)
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    startTransition(async () => {
+      const res = await loginAction({
+        email: values.email,
+        password: values.password,
+      });
+
+      if (res.success) {
+        // TODO
+      } else {
+        alert(res.message);
+      }
+    });
   }
 
   return (
@@ -72,7 +87,7 @@ export function SignInForm({ className, ...props }: React.ComponentProps<"div">)
 
                 <div className="flex flex-col gap-3">
                   <Button type="submit" className="w-full">
-                    Giriş Yap
+                    {isPending ? <Loader2 /> : "Giriş Yap"}
                   </Button>
                 </div>
               </div>
