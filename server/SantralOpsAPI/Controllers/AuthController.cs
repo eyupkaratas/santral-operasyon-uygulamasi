@@ -66,7 +66,7 @@ public class AuthController(SantralOpsDbContext context, IConfiguration config, 
     var tokenDescriptor = new SecurityTokenDescriptor
     {
       Subject = new ClaimsIdentity(claims),
-      Expires = DateTime.Now.AddMinutes(1),
+      Expires = DateTime.Now.AddHours(1),
       SigningCredentials = creds,
       Issuer = _config["Jwt:Issuer"],
       Audience = _config["Jwt:Audience"]
