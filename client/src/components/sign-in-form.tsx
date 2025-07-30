@@ -7,8 +7,10 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
 
@@ -19,6 +21,7 @@ const formSchema = z.object({
 
 export function SignInForm({ className, ...props }: React.ComponentProps<"div">) {
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -36,9 +39,9 @@ export function SignInForm({ className, ...props }: React.ComponentProps<"div">)
       });
 
       if (res.success) {
-        // TODO
+        router.push("/profil");
       } else {
-        alert(res.message);
+        toast(res.message, { position: "bottom-center" });
       }
     });
   }

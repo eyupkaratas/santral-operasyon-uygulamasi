@@ -2,13 +2,15 @@
 
 import { cookies } from "next/headers";
 
+const baseUrl = process.env.API_BASE_URL!;
+
 export async function loginAction(formData: {
   email: string;
   password: string;
 }): Promise<LoginResponse | ErrorResponse> {
   const cookieStore = await cookies();
 
-  const res = await fetch("http://localhost:5183/api/Auth/login", {
+  const res = await fetch(`${baseUrl}/api/Auth/Login`, {
     method: "POST",
     body: JSON.stringify({
       eposta: formData.email,
