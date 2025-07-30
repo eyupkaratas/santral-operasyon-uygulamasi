@@ -69,8 +69,12 @@ export default function Header() {
     <header className="w-full border-b">
       <div className="container mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
         {/* Logo */}
-        <Link href="/profil" className="text-xl font-bold">
-          ABC
+        <Link href="/profil" className="text-sm font-semibold md:text-base">
+          <div className="text-center">
+            Santral Operasyon
+            <br />
+            Uygulaması
+          </div>
         </Link>
 
         {/* Desktop Navigation */}
