@@ -25,15 +25,10 @@ public class AuthController(SantralOpsDbContext context, IConfiguration config, 
   {
     var personel = await _context.Personeller.FirstOrDefaultAsync(p => p.Eposta == loginDto.Eposta);
 
-    _logger.LogInformation("Login DTO received: {@LoginDto}", loginDto.Eposta);
-    _logger.LogInformation("Login DTO received: {@LoginDto}", loginDto.Sifre);
-
     if (personel == null)
     {
       return Unauthorized(new { status = 401, message = "Geçersiz e-posta veya şifre." });
     }
-
-    _logger.LogInformation("Personel fetched from DB: {@Personel}", personel.AdSoyad);
 
     if (!VerifyPasswordHash(loginDto.Sifre, personel.PasswordHash, personel.PasswordSalt))
     {
@@ -71,7 +66,7 @@ public class AuthController(SantralOpsDbContext context, IConfiguration config, 
     var tokenDescriptor = new SecurityTokenDescriptor
     {
       Subject = new ClaimsIdentity(claims),
-      Expires = DateTime.Now.AddDays(1),
+      Expires = DateTime.Now.AddMinutes(1),
       SigningCredentials = creds,
       Issuer = _config["Jwt:Issuer"],
       Audience = _config["Jwt:Audience"]
