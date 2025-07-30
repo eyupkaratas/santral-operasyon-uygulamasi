@@ -20,7 +20,7 @@ public class AuthController(SantralOpsDbContext context, IConfiguration config, 
   private readonly IConfiguration _config = config;
 
   // Post: api/Login
-  [HttpPost]
+  [HttpPost("Login")]
   public async Task<ActionResult<LoginResponseDto>> Login(LoginDto loginDto)
   {
     var personel = await _context.Personeller.FirstOrDefaultAsync(p => p.Eposta == loginDto.Eposta);
