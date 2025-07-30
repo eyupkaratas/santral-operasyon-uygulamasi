@@ -1,9 +1,12 @@
 "use client";
 
+import { logoutAction } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { ChevronRight, Menu } from "lucide-react";
+import { ChevronRight, Loader2, Menu } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 import ThemeToggler from "./theme-toggler";
 import {
   NavigationMenu,
@@ -51,6 +54,17 @@ const navLinks = [
 ];
 
 export default function Header() {
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+
+  function handleLogout(e: React.FormEvent) {
+    startTransition(async () => {
+      e.preventDefault();
+      await logoutAction();
+      router.push("/anasayfa");
+    });
+  }
+
   return (
     <header className="w-full border-b">
       <div className="container mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
@@ -89,6 +103,12 @@ export default function Header() {
           </NavigationMenuList>
 
           <ThemeToggler />
+
+          <form onSubmit={handleLogout}>
+            <Button type="submit" disabled={isPending}>
+              {isPending ? <Loader2 className="animate-spin" /> : "Çıkış Yap"}
+            </Button>
+          </form>
         </NavigationMenu>
 
         {/* Mobile Navigation */}

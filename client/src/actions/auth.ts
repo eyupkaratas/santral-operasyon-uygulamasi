@@ -41,3 +41,8 @@ export async function loginAction(formData: {
     token: data.token,
   };
 }
+
+export async function logoutAction() {
+  const cookieStore = await cookies();
+  cookieStore.delete("token");
+}
