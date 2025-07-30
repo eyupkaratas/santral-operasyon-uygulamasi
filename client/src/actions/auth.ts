@@ -1,5 +1,7 @@
 "use server";
 
+import { ErrorResponse } from "@/types/error-response";
+import { LoginResponse } from "@/types/login-response";
 import { cookies } from "next/headers";
 
 const baseUrl = process.env.API_BASE_URL!;

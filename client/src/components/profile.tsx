@@ -46,7 +46,7 @@ export default function Profile({ decodedToken }: ProfileProps) {
         },
       }
     );
-  }, []);
+  }, [personalAdSoyad, rol]);
 
   return (
     <Card>
