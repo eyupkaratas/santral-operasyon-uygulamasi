@@ -1,6 +1,5 @@
 import { getPersonnelsAction } from "@/actions/personnel";
 import { getUnitsAction } from "@/actions/unit";
-import SearchBar from "@/components/search-bar";
 import UnitFilter from "./(components)/unit-filter";
 import UnitList from "./(components)/unit-list";
 
@@ -19,7 +18,6 @@ export default async function Page({
       <div className="w-full max-w-lg space-y-2">
         <div className="text-center">Bilgi İşlem</div>
         <UnitFilter units={units} />
-        <SearchBar />
         <UnitList personnels={personnels} />
       </div>
     </div>
