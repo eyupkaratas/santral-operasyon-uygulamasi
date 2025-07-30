@@ -1,0 +1,33 @@
+services:
+  dotnet:
+    container_name: santral-ops-api
+    build:
+      context: ./server/SantralOpsAPI
+      dockerfile: Dockerfile
+    image: santral-ops-api:latest
+    ports:
+      - "8080:5049"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=mssql,1433;Database=master;User Id=sa;Password=sYfjMYP58xt3V5;TrustServerCertificate=True;
+    depends_on:
+      - mssql
+    networks:
+      - santral-ops-network
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: santral-ops-db
+    ports:
+      - "1433:1433"
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "sYfjMYP58xt3V5"
+    networks:
+      - santral-ops-network
+    restart: unless-stopped
+
+networks:
+  santral-ops-network:
+    name: santral-ops-network
+    driver: bridge
