@@ -23,7 +23,7 @@ public class AuthController(SantralOpsDbContext context, IConfiguration config, 
   [HttpPost("Login")]
   public async Task<ActionResult<LoginResponseDto>> Login(LoginDto loginDto)
   {
-    var personel = await _context.Personeller.FirstOrDefaultAsync(p => p.Eposta == loginDto.Eposta);
+    var personel = await _context.Personeller.Include(p => p.Birim).FirstOrDefaultAsync(p => p.Eposta == loginDto.Eposta);
 
     if (personel == null)
     {
@@ -54,10 +54,13 @@ public class AuthController(SantralOpsDbContext context, IConfiguration config, 
   {
     var claims = new List<Claim>
             {
-                new(ClaimTypes.NameIdentifier, personel.Id.ToString()),
-                new(ClaimTypes.Name, personel.AdSoyad),
-                new(ClaimTypes.Email, personel.Eposta),
-                new(ClaimTypes.Role, personel.Rol)
+                new("personalId", personel.Id.ToString()),
+                new("personalAdSoyad", personel.AdSoyad),
+                new("dahiliNo", personel.Dahili),
+                new("birim", personel.Birim.Ad),
+                new("unvan", personel.Unvan),
+                new("eposta", personel.Eposta),
+                new("rol", personel.Rol),
             };
 
     var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
