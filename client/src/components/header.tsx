@@ -120,42 +120,50 @@ export default function Header() {
               </Button>
             </SheetTrigger>
 
-            <SheetContent side="left" className="w-64 p-6">
-              <div className="flex items-center justify-between p-2">
-                <SheetTitle>Menü</SheetTitle>
-                <ThemeToggler />
-              </div>
-
+            <SheetContent side="left" className="flex w-64 flex-col justify-between p-6">
               <div className="space-y-2">
-                {navLinks.map((navLink, index) => (
-                  <div key={index}>
-                    {navLink.submenu ? (
-                      <details className="group">
-                        <summary className="flex items-center justify-between rounded px-2 py-1.5 font-medium">
-                          {navLink.label}
-                          <span className="transition-transform group-open:rotate-90">
-                            <ChevronRight width={16} height={16} />
-                          </span>
-                        </summary>
+                <div className="flex items-center justify-between p-2">
+                  <SheetTitle>Menü</SheetTitle>
+                  <ThemeToggler />
+                </div>
 
-                        <ul className="mt-2 ml-4 space-y-1">
-                          {navLink.items.map((item, idx) => (
-                            <li key={idx}>
-                              <Link href={item.href} className="block rounded px-2 py-1 font-medium">
-                                {item.label}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </details>
-                    ) : (
-                      <Link href={navLink.href!} className="block rounded px-2 py-1.5 font-medium">
-                        {navLink.label}
-                      </Link>
-                    )}
-                  </div>
-                ))}
+                <div className="space-y-2">
+                  {navLinks.map((navLink, index) => (
+                    <div key={index}>
+                      {navLink.submenu ? (
+                        <details className="group">
+                          <summary className="flex items-center justify-between rounded px-2 py-1.5 font-medium">
+                            {navLink.label}
+                            <span className="transition-transform group-open:rotate-90">
+                              <ChevronRight width={16} height={16} />
+                            </span>
+                          </summary>
+
+                          <ul className="mt-2 ml-4 space-y-1">
+                            {navLink.items.map((item, idx) => (
+                              <li key={idx}>
+                                <Link href={item.href} className="block rounded px-2 py-1 font-medium">
+                                  {item.label}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </details>
+                      ) : (
+                        <Link href={navLink.href!} className="block rounded px-2 py-1.5 font-medium">
+                          {navLink.label}
+                        </Link>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
+
+              <form onSubmit={handleLogout}>
+                <Button type="submit" disabled={isPending}>
+                  {isPending ? <Loader2 className="animate-spin" /> : "Çıkış Yap"}
+                </Button>
+              </form>
             </SheetContent>
           </Sheet>
         </div>
