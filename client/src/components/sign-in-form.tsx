@@ -41,7 +41,7 @@ export function SignInForm({ className, ...props }: React.ComponentProps<"div">)
       if (res.success) {
         router.push("/profil");
       } else {
-        toast(res.message, { position: "bottom-center" });
+        toast.error(res.message, { position: "bottom-center", closeButton: true });
       }
     });
   }
