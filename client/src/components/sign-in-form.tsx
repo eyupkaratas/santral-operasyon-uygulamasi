@@ -89,7 +89,7 @@ export function SignInForm({ className, ...props }: React.ComponentProps<"div">)
                 />
 
                 <div className="flex flex-col gap-3">
-                  <Button type="submit" className="w-full">
+                  <Button type="submit" className="w-full" disabled={isPending}>
                     {isPending ? <Loader2 className="animate-spin" /> : "Giriş Yap"}
                   </Button>
                 </div>
