@@ -36,7 +36,7 @@ public class PersonellerController(SantralOpsDbContext context) : ControllerBase
           Id = p.Id,
           AdSoyad = p.AdSoyad,
           Unvan = p.Unvan,
-          Dahili = p.Dahili,
+          DahiliNo = p.Dahili,
           Eposta = p.Eposta,
           Rol = p.Rol,
           Birim = new BirimTemelDto { Id = p.Birim.Id, Ad = p.Birim.Ad }
@@ -58,7 +58,7 @@ public class PersonellerController(SantralOpsDbContext context) : ControllerBase
           Id = p.Id,
           AdSoyad = p.AdSoyad,
           Unvan = p.Unvan,
-          Dahili = p.Dahili,
+          DahiliNo = p.Dahili,
           Eposta = p.Eposta,
           Rol = p.Rol,
           Birim = new BirimTemelDto { Id = p.Birim.Id, Ad = p.Birim.Ad }
@@ -106,7 +106,7 @@ public class PersonellerController(SantralOpsDbContext context) : ControllerBase
       Id = yeniPersonel.Id,
       AdSoyad = yeniPersonel.AdSoyad,
       Unvan = yeniPersonel.Unvan,
-      Dahili = yeniPersonel.Dahili,
+      DahiliNo = yeniPersonel.Dahili,
       Eposta = yeniPersonel.Eposta,
       Rol = yeniPersonel.Rol,
       Birim = new BirimTemelDto { Id = yeniPersonel.BirimId, Ad = _context.Birimler.Find(yeniPersonel.BirimId).Ad }
