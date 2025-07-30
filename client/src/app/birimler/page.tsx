@@ -16,7 +16,7 @@ export default async function Page({
   return (
     <div className="flex justify-center">
       <div className="w-full max-w-lg space-y-2">
-        <div className="text-center">Bilgi İşlem</div>
+        <div className="text-center">Birimler ve Personeller</div>
         <AsyncWrapper
           loader={getUnitsAction}
           fallback={<UnitFilterSkeleton />}
