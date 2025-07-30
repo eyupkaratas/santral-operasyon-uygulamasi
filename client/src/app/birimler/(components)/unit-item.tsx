@@ -1,12 +1,21 @@
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Personnel } from "@/types/personnel";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
-export default function UnitItem() {
+type UnitItemProps = {
+  personnel: Personnel;
+};
+
+export default function UnitItem({ personnel }: UnitItemProps) {
+  const { adSoyad, unvan } = personnel;
+
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Card className="hover:bg-muted/90 rounded-md px-4 py-2">Eyüp Karataş, Yazılım Mühendisi</Card>
+        <Card className="hover:bg-muted/90 rounded-md px-4 py-2">
+          {adSoyad}, {unvan}
+        </Card>
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-md">
