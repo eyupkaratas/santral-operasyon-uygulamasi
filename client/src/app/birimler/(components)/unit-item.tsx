@@ -1,3 +1,4 @@
+import ProfileCard from "@/components/profile-card";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Personnel } from "@/types/personnel";
@@ -8,7 +9,7 @@ type UnitItemProps = {
 };
 
 export default function UnitItem({ personnel }: UnitItemProps) {
-  const { adSoyad, unvan } = personnel;
+  const { adSoyad, birim, unvan, dahiliNo, eposta } = personnel;
 
   return (
     <Dialog>
@@ -23,7 +24,7 @@ export default function UnitItem({ personnel }: UnitItemProps) {
           <DialogTitle>Profil</DialogTitle>
         </VisuallyHidden>
 
-        {/* TODO: Personal Card  */}
+        <ProfileCard adSoyad={adSoyad} birim={birim.ad} unvan={unvan} dahiliNo={dahiliNo} eposta={eposta} />
       </DialogContent>
     </Dialog>
   );

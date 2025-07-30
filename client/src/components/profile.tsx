@@ -1,9 +1,9 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DecodedToken } from "@/types/decoded-token";
 import { useEffect } from "react";
 import { toast } from "sonner";
+import ProfileCard from "./profile-card";
 
 type CardItemProps = {
   label: string;
@@ -48,20 +48,5 @@ export default function Profile({ decodedToken }: ProfileProps) {
     );
   }, [personalAdSoyad, rol]);
 
-  return (
-    <Card>
-      <CardHeader className="border-b-1">
-        <CardTitle className="mb-4 text-center">Profil</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <CardItem label="İsim, Soyisim" content={personalAdSoyad} />
-
-        <CardItem label="Birim, Ünvan" content={`${birim}\n${unvan}`} />
-
-        <CardItem label="Dahili No" content={dahiliNo} />
-
-        <CardItem label="E-Posta" content={eposta} />
-      </CardContent>
-    </Card>
-  );
+  return <ProfileCard adSoyad={personalAdSoyad} birim={birim} unvan={unvan} dahiliNo={dahiliNo} eposta={eposta} />;
 }

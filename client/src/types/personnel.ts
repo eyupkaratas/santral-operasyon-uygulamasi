@@ -9,7 +9,7 @@ export type Personnel = {
   id: number;
   adSoyad: string;
   unvan: string;
-  dahili: string;
+  dahiliNo: string;
   eposta: string;
   rol: Role;
   birim: Birim;
