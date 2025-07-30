@@ -72,6 +72,13 @@ if (app.Environment.IsDevelopment())
   app.UseSwaggerUI();
 }
 
+var isDocker = Environment.GetEnvironmentVariable("IS_DOCKER");
+
+if (!string.IsNullOrEmpty(isDocker))
+{
+  app.Urls.Add("http://0.0.0.0:5049");
+}
+
 app.UseAuthentication();
 app.UseAuthorization();
 

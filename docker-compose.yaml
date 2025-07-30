@@ -8,6 +8,7 @@ services:
     ports:
       - "8080:5049"
     environment:
+      - IS_DOCKER=true
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Server=mssql,1433;Database=master;User Id=sa;Password=sYfjMYP58xt3V5;TrustServerCertificate=True;
     depends_on:
