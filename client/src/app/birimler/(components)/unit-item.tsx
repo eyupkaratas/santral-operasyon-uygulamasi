@@ -1,4 +1,3 @@
-import Profile from "@/components/profile";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
@@ -15,7 +14,7 @@ export default function UnitItem() {
           <DialogTitle>Profil</DialogTitle>
         </VisuallyHidden>
 
-        <Profile />
+        {/* TODO: Personal Card  */}
       </DialogContent>
     </Dialog>
   );
