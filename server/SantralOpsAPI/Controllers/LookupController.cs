@@ -65,14 +65,14 @@ public class LookupController(SantralOpsDbContext context) : ControllerBase
   {
     var normalizedNumber = PhoneNumberHelper.Normalize(aramaDto.Numara);
     if (string.IsNullOrEmpty(normalizedNumber))
-      return BadRequest("Geçersiz telefon numarası formatı.");
+      return BadRequest(new { status = 400, message = "Geçersiz telefon numarası formatı." });
 
     var telefonNumarasi = await _context.TelefonNumaralari.FirstOrDefaultAsync(t => t.Numara == normalizedNumber);
 
     if (telefonNumarasi == null)
     {
       if (string.IsNullOrWhiteSpace(aramaDto.YeniKisiAdi))
-        return BadRequest("Numara kayıtlı değil. Yeni kişi oluşturmak için 'YeniKisiAdi' alanı zorunludur.");
+        return BadRequest(new { status = 400, message = "Numara kayıtlı değil. Yeni kişi oluşturmak için 'YeniKisiAdi' alanı zorunludur." });
 
       var yeniKisi = new Kisi { AdSoyad = aramaDto.YeniKisiAdi };
       telefonNumarasi = new TelefonNumarasi { Numara = normalizedNumber, Kisi = yeniKisi };
@@ -90,6 +90,10 @@ public class LookupController(SantralOpsDbContext context) : ControllerBase
     _context.TelefonAramaKayitlari.Add(aramaKaydi);
     await _context.SaveChangesAsync();
 
-    return Ok();
+    return Created(string.Empty, new
+    {
+      aramaKaydi.Id
+    });
+
   }
 }
