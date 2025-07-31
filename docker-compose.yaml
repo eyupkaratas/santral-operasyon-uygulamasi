@@ -1,4 +1,18 @@
 services:
+  next:
+    container_name: santral-ops-client
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    image: santral-ops-client:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - JWT_SECRET=48D4E3839EFD528F542F8791F736403DCA1CA21E5EED146E722572DF0442E79F
+      - API_BASE_URL=http://santral-ops-api:5049
+    networks:
+      - santral-ops-network
+
   dotnet:
     container_name: santral-ops-api
     build:
