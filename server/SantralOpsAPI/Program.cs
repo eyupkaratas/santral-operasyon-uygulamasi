@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SantralOpsAPI.Persistence;
 using System.Text;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -73,6 +74,17 @@ if (app.Environment.IsDevelopment())
   app.UseSwagger();
   app.UseSwaggerUI();
 }
+
+app.UseStatusCodePages(async context =>
+{
+  var response = context.HttpContext.Response;
+  if (response.StatusCode == 403)
+  {
+    response.ContentType = "application/json";
+    var errorResponse = new { status = 403, message = "Bu kaynağa erişim yetkiniz bulunmamaktadır." };
+    await response.WriteAsync(JsonSerializer.Serialize(errorResponse));
+  }
+});
 
 var isDocker = Environment.GetEnvironmentVariable("IS_DOCKER");
 
