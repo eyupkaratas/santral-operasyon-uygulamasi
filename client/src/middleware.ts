@@ -1,7 +1,11 @@
 import { jwtVerify } from "jose";
 import { NextRequest, NextResponse } from "next/server";
+import { DecodedToken } from "./types/decoded-token";
 
 const publicRoutes = ["/anasayfa"];
+const operatorRoutes = ["/numara-kaydi"];
+const adminRoutes = ["/personel-olustur"];
+
 const jwtSecret = new TextEncoder().encode(process.env.JWT_SECRET);
 
 function redirect(request: NextRequest, to: string) {
@@ -12,22 +16,34 @@ function redirect(request: NextRequest, to: string) {
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
-  const isPublic = publicRoutes.some(
-    (route) => pathname.startsWith(route) //
-  );
-
-  if (isPublic) return NextResponse.next();
-
-  const token = request.cookies.get("token")?.value;
-
-  if (!token) {
-    return redirect(request, "/anasayfa");
+  if (publicRoutes.some((route) => pathname.startsWith(route))) {
+    return NextResponse.next();
   }
 
+  const token = request.cookies.get("token")?.value;
+  if (!token) return redirect(request, "/anasayfa");
+
+  let decodedToken: DecodedToken;
   try {
-    await jwtVerify(token, jwtSecret);
+    const { payload } = await jwtVerify(token, jwtSecret);
+    decodedToken = payload as DecodedToken;
   } catch {
     return redirect(request, "/anasayfa");
+  }
+  const userRole = decodedToken.rol;
+
+  if (
+    operatorRoutes.some((route) => pathname.startsWith(route)) &&
+    !["Operator", "Admin"].includes(userRole) //
+  ) {
+    return redirect(request, "/profil");
+  }
+
+  if (
+    adminRoutes.some((route) => pathname.startsWith(route)) &&
+    decodedToken.rol !== "Admin" //
+  ) {
+    return redirect(request, "/profil");
   }
 
   return NextResponse.next();
