@@ -8,45 +8,41 @@ const operatorRoutes = ["/numara-kaydi"];
 
 const jwtSecret = new TextEncoder().encode(process.env.JWT_SECRET);
 
-function redirectToLogin(request: NextRequest) {
-  const homeUrl = new URL("/anasayfa", request.url);
-  return NextResponse.redirect(homeUrl);
-}
-
-function redirectToProfile(request: NextRequest) {
-  const homeUrl = new URL("/profil", request.url);
-  return NextResponse.redirect(homeUrl);
+function redirect(request: NextRequest, to: string) {
+  const url = new URL(to, request.url);
+  return NextResponse.redirect(url);
 }
 
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
-  const isPublicRoute = publicRoutes.some((route) => pathname.startsWith(route));
-
-  if (isPublicRoute) return NextResponse.next();
-
-  const token = request.cookies.get("token")?.value;
-
-  if (!token) {
-    return redirectToLogin(request);
+  if (publicRoutes.some((route) => pathname.startsWith(route))) {
+    return NextResponse.next();
   }
 
+  const token = request.cookies.get("token")?.value;
+  if (!token) return redirect(request, "/anasayfa");
+
+  let decodedToken: DecodedToken;
   try {
     const { payload } = await jwtVerify(token, jwtSecret);
-    const decodedToken = payload as DecodedToken;
-
-    const isOperatorRoute = operatorRoutes.some((route) => pathname.startsWith(route));
-    const isAdminRoute = adminRoutes.some((route) => pathname.startsWith(route));
-
-    if (isOperatorRoute && !["Operator", "Admin"].includes(decodedToken.rol)) {
-      return redirectToProfile(request);
-    }
-
-    if (isAdminRoute && decodedToken.rol !== "Admin") {
-      return redirectToProfile(request);
-    }
+    decodedToken = payload as DecodedToken;
   } catch {
-    return redirectToLogin(request);
+    return redirect(request, "/anasayfa");
+  }
+
+  if (
+    operatorRoutes.some((route) => pathname.startsWith(route)) &&
+    !["Operator", "Admin"].includes(decodedToken.rol) //
+  ) {
+    return redirect(request, "/profil");
+  }
+
+  if (
+    adminRoutes.some((route) => pathname.startsWith(route)) &&
+    decodedToken.rol !== "Admin" //
+  ) {
+    return redirect(request, "/profil");
   }
 
   return NextResponse.next();
