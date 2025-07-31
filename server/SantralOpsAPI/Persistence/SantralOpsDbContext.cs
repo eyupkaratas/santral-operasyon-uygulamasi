@@ -12,4 +12,5 @@ public class SantralOpsDbContext(DbContextOptions<SantralOpsDbContext> options) 
   public DbSet<Ticket> Tickets { get; set; }
   public DbSet<Randevu> Randevular { get; set; }
   public DbSet<Kargo> Kargolar { get; set; }
+  public DbSet<TelefonAramaKaydi> TelefonAramaKayitlari { get; set; }
 }
