@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using SantralOpsAPI.DTOs;
 using SantralOpsAPI.Entities;
 using SantralOpsAPI.Helpers;
@@ -7,8 +8,8 @@ using SantralOpsAPI.Persistence;
 
 namespace SantralOpsAPI.Controllers;
 
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/[controller]")]
 public class TicketsController(SantralOpsDbContext context) : ControllerBase
 {
   private readonly SantralOpsDbContext _context = context;
@@ -40,6 +41,7 @@ public class TicketsController(SantralOpsDbContext context) : ControllerBase
 
   // POST: api/Tickets
   [HttpPost]
+  [Authorize(Roles = "Admin, Operator")]
   public async Task<ActionResult<TicketOzetDto>> PostTicket(TicketOlusturDto ticketDto)
   {
     var olusturanPersonelVarMi = await _context.Personeller.AnyAsync(p => p.Id == ticketDto.OlusturanPersonelId);
@@ -110,6 +112,7 @@ public class TicketsController(SantralOpsDbContext context) : ControllerBase
 
   // PUT: api/Tickets/{id}
   [HttpPut("{id}")]
+  [Authorize(Roles = "Admin, Operator")]
   public async Task<IActionResult> PutTicket(int id, TicketGuncelleDto ticketDto)
   {
     var ticket = await _context.Tickets.FindAsync(id);

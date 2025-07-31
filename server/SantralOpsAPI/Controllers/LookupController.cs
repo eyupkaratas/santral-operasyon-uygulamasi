@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using SantralOpsAPI.DTOs;
 using SantralOpsAPI.Entities;
 using SantralOpsAPI.Helpers;
@@ -13,15 +14,13 @@ public class LookupController(SantralOpsDbContext context) : ControllerBase
 {
   private readonly SantralOpsDbContext _context = context;
 
-  // GET: api/Lookup/{numara}
   [HttpGet("{numara}")]
+  [Authorize(Roles = "Admin, Operator")]
   public async Task<ActionResult<KisiDetayDto>> LookupByNumber(string numara)
   {
     var normalizedNumber = PhoneNumberHelper.Normalize(numara);
     if (string.IsNullOrEmpty(normalizedNumber))
-    {
       return BadRequest("Geçersiz telefon numarası formatı.");
-    }
 
     var telefon = await _context.TelefonNumaralari
         .Include(t => t.Kisi)
@@ -29,9 +28,20 @@ public class LookupController(SantralOpsDbContext context) : ControllerBase
         .FirstOrDefaultAsync(t => t.Numara == normalizedNumber);
 
     if (telefon == null)
-    {
       return NotFound("Bu numaraya kayıtlı bir kişi bulunamadı.");
-    }
+
+    var sonAramalar = await _context.TelefonAramaKayitlari
+        .Where(a => a.TelefonNumarasi.KisiId == telefon.KisiId)
+        .Include(a => a.Personel)
+        .OrderByDescending(a => a.AramaZamani)
+        .Take(10)
+        .Select(a => new AramaKaydiOzetDto
+        {
+          Yonu = a.Yonu.ToString(),
+          AramaZamani = a.AramaZamani,
+          PersonelAdi = a.Personel.AdSoyad,
+          Notlar = a.Notlar
+        }).ToListAsync();
 
     var kisiDto = new KisiDetayDto
     {
@@ -42,51 +52,44 @@ public class LookupController(SantralOpsDbContext context) : ControllerBase
       {
         Id = tn.Id,
         Numara = tn.Numara
-      }).ToList()
+      }).ToList(),
+      SonAramalar = sonAramalar
     };
 
     return Ok(kisiDto);
   }
 
-  // POST: api/Lookup
   [HttpPost]
-  public async Task<ActionResult<KisiDetayDto>> CreateKisi(KisiOlusturDto kisiDto)
+  [Authorize(Roles = "Admin, Operator")]
+  public async Task<IActionResult> LogCall(AramaKaydiOlusturDto aramaDto)
   {
-    var normalizedNumber = PhoneNumberHelper.Normalize(kisiDto.Numara);
+    var normalizedNumber = PhoneNumberHelper.Normalize(aramaDto.Numara);
     if (string.IsNullOrEmpty(normalizedNumber))
-    {
       return BadRequest("Geçersiz telefon numarası formatı.");
+
+    var telefonNumarasi = await _context.TelefonNumaralari.FirstOrDefaultAsync(t => t.Numara == normalizedNumber);
+
+    if (telefonNumarasi == null)
+    {
+      if (string.IsNullOrWhiteSpace(aramaDto.YeniKisiAdi))
+        return BadRequest("Numara kayıtlı değil. Yeni kişi oluşturmak için 'YeniKisiAdi' alanı zorunludur.");
+
+      var yeniKisi = new Kisi { AdSoyad = aramaDto.YeniKisiAdi };
+      telefonNumarasi = new TelefonNumarasi { Numara = normalizedNumber, Kisi = yeniKisi };
+      _context.TelefonNumaralari.Add(telefonNumarasi);
     }
 
-    var existingNumber = await _context.TelefonNumaralari.FirstOrDefaultAsync(t => t.Numara == normalizedNumber);
-    if (existingNumber != null)
+    var aramaKaydi = new TelefonAramaKaydi
     {
-      return BadRequest("Bu telefon numarası zaten sisteme kayıtlı.");
-    }
-
-    var yeniKisi = new Kisi
-    {
-      AdSoyad = kisiDto.AdSoyad,
-      Notlar = kisiDto.Notlar
+      TelefonNumarasi = telefonNumarasi,
+      Yonu = aramaDto.Yonu,
+      PersonelId = aramaDto.PersonelId,
+      Notlar = aramaDto.Notlar
     };
 
-    var yeniNumara = new TelefonNumarasi
-    {
-      Numara = normalizedNumber,
-      Kisi = yeniKisi
-    };
-
-    _context.TelefonNumaralari.Add(yeniNumara);
+    _context.TelefonAramaKayitlari.Add(aramaKaydi);
     await _context.SaveChangesAsync();
 
-    var responseDto = new KisiDetayDto
-    {
-      Id = yeniKisi.Id,
-      AdSoyad = yeniKisi.AdSoyad,
-      Notlar = yeniKisi.Notlar,
-      TelefonNumaralari = new() { new TelefonNumarasiDto { Id = yeniNumara.Id, Numara = yeniNumara.Numara } }
-    };
-
-    return CreatedAtAction(nameof(LookupByNumber), new { numara = yeniNumara.Numara }, responseDto);
+    return Ok();
   }
 }

@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using SantralOpsAPI.DTOs;
 using SantralOpsAPI.Entities;
 using SantralOpsAPI.Persistence;
 
 namespace SantralOpsAPI.Controllers;
 
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/[controller]")]
 public class RandevularController(SantralOpsDbContext context) : ControllerBase
 {
   private readonly SantralOpsDbContext _context = context;
@@ -36,6 +37,7 @@ public class RandevularController(SantralOpsDbContext context) : ControllerBase
 
   // POST: api/Randevular
   [HttpPost]
+  [Authorize(Roles = "Admin, Operator")]
   public async Task<ActionResult<RandevuOzetDto>> PostRandevu(RandevuOlusturDto randevuDto)
   {
     var personelVarMi = await _context.Personeller.AnyAsync(p => p.Id == randevuDto.PersonelId);

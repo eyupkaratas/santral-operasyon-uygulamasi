@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using SantralOpsAPI.DTOs;
 using SantralOpsAPI.Entities;
 using SantralOpsAPI.Enums;
@@ -38,6 +39,7 @@ public class KargolarController(SantralOpsDbContext context) : ControllerBase
 
   // POST: api/Kargolar
   [HttpPost]
+  [Authorize(Roles = "Admin, Operator")]
   public async Task<ActionResult<KargoOzetDto>> PostKargo(KargoGirisDto kargoDto)
   {
     var personelVarMi = await _context.Personeller.AnyAsync(p => p.Id == kargoDto.TeslimAlanPersonelId);
@@ -75,6 +77,7 @@ public class KargolarController(SantralOpsDbContext context) : ControllerBase
 
   // PUT: api/Kargolar/{id}/teslimet
   [HttpPut("{id}/teslimet")]
+  [Authorize(Roles = "Admin, Operator")]
   public async Task<IActionResult> TeslimEt(int id)
   {
     var kargo = await _context.Kargolar.FindAsync(id);

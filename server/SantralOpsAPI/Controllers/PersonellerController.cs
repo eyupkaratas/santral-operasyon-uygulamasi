@@ -117,6 +117,7 @@ public class PersonellerController(SantralOpsDbContext context) : ControllerBase
 
   // PUT: api/Personeller/{id}
   [HttpPut("{id}")]
+  [Authorize(Roles = "Admin")]
   public async Task<IActionResult> PutPersonel(int id, PersonelOlusturGuncelleDto personelDto)
   {
     var personel = await _context.Personeller.FindAsync(id);
@@ -146,6 +147,7 @@ public class PersonellerController(SantralOpsDbContext context) : ControllerBase
 
   // DELETE: api/Personeller/{id}
   [HttpDelete("{id}")]
+  [Authorize(Roles = "Admin")]
   public async Task<IActionResult> DeletePersonel(int id)
   {
     var personel = await _context.Personeller.FindAsync(id);
