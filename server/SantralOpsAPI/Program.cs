@@ -18,6 +18,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     {
       options.TokenValidationParameters = new TokenValidationParameters
       {
+        RoleClaimType = "rol",
         ValidateIssuer = true,
         ValidateAudience = true,
         ValidateLifetime = true,
@@ -35,9 +36,10 @@ builder.Services.AddSwaggerGen(c =>
   c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
   {
     Description = "JWT Authorization header. Örnek: 'Bearer {token}'",
-    Type = SecuritySchemeType.ApiKey,
+    Type = SecuritySchemeType.Http,
     In = ParameterLocation.Header,
     Name = "Authorization",
+    BearerFormat = "JWT",
     Scheme = "Bearer"
   });
   c.AddSecurityRequirement(new OpenApiSecurityRequirement()
