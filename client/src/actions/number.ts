@@ -1,7 +1,9 @@
 "use server";
 
+import { DecodedToken } from "@/types/decoded-token";
 import { ErrorResponse } from "@/types/error-response";
 import { RecordNumberResponse } from "@/types/record-number-response";
+import { decodeJwt } from "jose";
 import { cookies } from "next/headers";
 
 const baseUrl = process.env.API_BASE_URL!;
@@ -9,7 +11,6 @@ const baseUrl = process.env.API_BASE_URL!;
 export async function createNumberRecordAction(formData: {
   no: string;
   direction: number;
-  personnelId: number;
   notes: string;
   personName: string;
 }): Promise<RecordNumberResponse | ErrorResponse> {
@@ -17,12 +18,22 @@ export async function createNumberRecordAction(formData: {
 
   const token = cookieStore.get("token");
 
+  if (!token) {
+    return {
+      success: false,
+      status: 401,
+      message: "Yetkisiz erişim.",
+    };
+  }
+
+  const decodedToken: DecodedToken = decodeJwt(token.value);
+
   const res = await fetch(`${baseUrl}/api/Lookup`, {
     method: "POST",
     body: JSON.stringify({
       numara: formData.no,
       yonu: formData.direction,
-      personelId: formData.personnelId,
+      personelId: decodedToken.personalId,
       notlar: formData.notes,
       yeniKisiAdi: formData.personName,
     }),

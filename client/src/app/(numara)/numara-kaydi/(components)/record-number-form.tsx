@@ -18,7 +18,6 @@ import { z } from "zod";
 const formSchema = z.object({
   no: z.string().nonempty({ message: "Lütfen bir numara girin." }),
   direction: z.string().nonempty({ message: "Lütfen bir arama yönü girin." }),
-  personnelId: z.string().nonempty({ message: "Lütfen bir personel id girin." }),
   notes: z.string(),
   personName: z.string().nonempty({ message: "Lütfen bir kişi adı girin." }),
 });
@@ -31,7 +30,6 @@ export function RecordNumberForm({ className, ...props }: React.ComponentProps<"
     defaultValues: {
       no: "",
       direction: "",
-      personnelId: "",
       notes: "",
       personName: "",
     },
@@ -42,13 +40,13 @@ export function RecordNumberForm({ className, ...props }: React.ComponentProps<"
       const res = await createNumberRecordAction({
         no: values.no,
         direction: Number(values.direction),
-        personnelId: Number(values.personnelId),
         notes: values.notes,
         personName: values.personName,
       });
 
       if (res.success) {
         toast.success("Numara kaydı oluşturuldu.", { position: "top-center", closeButton: true });
+        form.reset();
       } else {
         toast.error(res.message, { position: "top-center", closeButton: true });
       }
@@ -98,22 +96,6 @@ export function RecordNumberForm({ className, ...props }: React.ComponentProps<"
                               <SelectItem value="1">Giden</SelectItem>
                             </SelectContent>
                           </Select>
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  name="personnelId"
-                  control={form.control}
-                  render={({ field }) => (
-                    <FormItem>
-                      <div className="grid gap-3">
-                        <FormLabel>Personel ID</FormLabel>
-                        <FormControl>
-                          <Input placeholder="1234" {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>
