@@ -31,7 +31,7 @@ const navLinks = [
     label: "Kargo",
     submenu: true,
     items: [
-      { href: "/kargolarim", label: "Kargolarım" },
+      { href: "/kargolar", label: "Kargolarım" },
       { href: "/kargo-girisi", label: "Kargo Girişi" },
     ],
   },
