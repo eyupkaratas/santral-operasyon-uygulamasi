@@ -3,6 +3,7 @@
 import { Cargo } from "@/types/cargo";
 import { ErrorResponse } from "@/types/error-response";
 import { RecordCargoResponse } from "@/types/record-cargo-response";
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
 const baseUrl = process.env.API_BASE_URL!;
@@ -63,5 +64,45 @@ export async function createCargoAction(formData: {
   return {
     success: true,
     cargo: data,
+  };
+}
+
+export async function deliverCargoAction(cargoId: number) {
+  const cookieStore = await cookies();
+
+  const token = cookieStore.get("token");
+
+  if (!token) {
+    return {
+      success: false,
+      status: 401,
+      message: "Yetkisiz erişim.",
+    };
+  }
+
+  const res = await fetch(`${baseUrl}/api/Kargolar/${cargoId}/teslimet`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token?.value}`,
+    },
+  });
+
+  console.log(res);
+
+  if (!res.ok) {
+    const error: ErrorResponse = await res.json();
+    return {
+      success: false,
+      status: error.status,
+      message: error.message,
+    };
+  }
+
+  revalidatePath("/kargolar");
+
+  return {
+    success: true,
+    message: "Kargo teslim edildi olarak işaretlendi.",
   };
 }
