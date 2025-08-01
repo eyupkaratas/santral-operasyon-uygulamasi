@@ -3,8 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { DecodedToken } from "./types/decoded-token";
 
 const publicRoutes = ["/anasayfa"];
-const operatorRoutes = ["/numara-kaydi"];
 const adminRoutes = ["/personel-olustur"];
+const operatorRoutes = ["/numara-kaydi", "/kargo-girisi"];
 
 const jwtSecret = new TextEncoder().encode(process.env.JWT_SECRET);
 
