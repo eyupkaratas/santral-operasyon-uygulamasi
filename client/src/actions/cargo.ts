@@ -88,8 +88,6 @@ export async function deliverCargoAction(cargoId: number) {
     },
   });
 
-  console.log(res);
-
   if (!res.ok) {
     const error: ErrorResponse = await res.json();
     return {

@@ -26,9 +26,11 @@ public class TicketsController(SantralOpsDbContext context) : ControllerBase
         {
           Id = t.Id,
           Konu = t.Konu,
+          Aciklama = t.Aciklama,
           Durum = t.Durum.ToString(),
           Oncelik = t.Oncelik.ToString(),
           TalebiYapanKisi = t.TalebiYapanKisi.AdSoyad,
+          AtananPersonelId = t.AtananPersonelId,
           OlusturanPersonel = t.OlusturanPersonel.AdSoyad,
           AtananPersonel = t.AtananPersonel != null ? t.AtananPersonel.AdSoyad : "Atanmadı",
           CreatedDate = t.CreatedDate
@@ -99,10 +101,12 @@ public class TicketsController(SantralOpsDbContext context) : ControllerBase
     {
       Id = ticket.Id,
       Konu = ticket.Konu,
+      Aciklama = ticket.Aciklama,
       Durum = ticket.Durum.ToString(),
       Oncelik = ticket.Oncelik.ToString(),
       TalebiYapanKisi = talebiYapanKisi.AdSoyad,
       OlusturanPersonel = olusturanPersonel.AdSoyad,
+      AtananPersonelId = ticket.AtananPersonelId,
       AtananPersonel = atananPersonel != null ? atananPersonel.AdSoyad : "Atanmadı",
       CreatedDate = ticket.CreatedDate
     };

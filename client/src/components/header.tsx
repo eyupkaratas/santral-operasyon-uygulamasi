@@ -23,7 +23,7 @@ const navLinks = [
     label: "Talep",
     submenu: true,
     items: [
-      { href: "/taleplerim", label: "Taleplerim" },
+      { href: "/talepler", label: "Talepler" },
       { href: "/talep-olustur", label: "Talep Oluştur" },
     ],
   },
