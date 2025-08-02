@@ -55,7 +55,7 @@ export function RecordNumberForm({ className, ...props }: React.ComponentProps<"
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card>
+      <Card className="max-h-[80vh] overflow-y-auto">
         <CardHeader>
           <CardTitle className="text-center">Numara Kaydı</CardTitle>
         </CardHeader>

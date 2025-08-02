@@ -23,7 +23,7 @@ type CargoCardProps = {
 
 export default function CargoCard({ cargo }: CargoCardProps) {
   return (
-    <Card>
+    <Card className="max-h-[80vh] overflow-y-auto">
       <CardHeader className="border-b-1">
         <CardTitle className="mb-4 text-center">Kargo</CardTitle>
       </CardHeader>

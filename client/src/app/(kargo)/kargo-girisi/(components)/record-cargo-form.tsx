@@ -54,7 +54,7 @@ export function RecordCargoForm({ className, ...props }: React.ComponentProps<"d
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card>
+      <Card className="max-h-[80vh] overflow-y-auto">
         <CardHeader>
           <CardTitle className="text-center">Kargo Girişi</CardTitle>
         </CardHeader>

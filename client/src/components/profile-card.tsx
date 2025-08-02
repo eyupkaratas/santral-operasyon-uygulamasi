@@ -28,7 +28,7 @@ export default function ProfileCard(props: ProfileCardProps) {
   const { adSoyad, birim, unvan, dahiliNo, eposta } = props;
 
   return (
-    <Card>
+    <Card className="max-h-[80vh] overflow-y-auto">
       <CardHeader className="border-b-1">
         <CardTitle className="mb-4 text-center">Profil</CardTitle>
       </CardHeader>
