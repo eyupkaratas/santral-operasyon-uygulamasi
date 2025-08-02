@@ -12,18 +12,9 @@ export default function Component() {
   const [checked, setChecked] = useState<boolean>(true);
 
   useEffect(() => {
-    const storedTheme = localStorage.getItem("theme");
-
-    if (storedTheme === "light") {
-      setTheme("light");
-      setChecked(true);
-    } else if (storedTheme === "dark") {
-      setTheme("dark");
-      setChecked(false);
-    } else {
-      setTheme("system");
-      setChecked(storedTheme === "light" ? true : false);
-    }
+    const storedTheme = localStorage.getItem("theme") || "system";
+    setChecked(storedTheme === "light");
+    setTheme(storedTheme);
   }, [setTheme]);
 
   const handleThemeChange = (value: boolean) => {
