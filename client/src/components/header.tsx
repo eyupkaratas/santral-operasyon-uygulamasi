@@ -19,6 +19,7 @@ import {
 
 const navLinks = [
   { href: "/birimler", label: "Birimler" },
+  { href: "/personel-olustur", label: "Personel Oluştur" },
   {
     label: "Talep",
     submenu: true,
