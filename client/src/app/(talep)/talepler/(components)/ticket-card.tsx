@@ -49,7 +49,7 @@ export default function TicketCard({ ticket }: TicketCardProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      personnelId: ticket.atananPersonelId.toString(),
+      personnelId: ticket.atananPersonelId?.toString() || "",
       status: ticket.durum === "Acik" ? "0" : "1",
       priority: priorityMap[ticket.oncelik] ?? "1",
     },
