@@ -1,7 +1,10 @@
 "use server";
 
+import { DecodedToken } from "@/types/decoded-token";
 import { ErrorResponse } from "@/types/error-response";
+import { RecordTicketResponse } from "@/types/record-ticket-response";
 import { Ticket } from "@/types/ticket";
+import { decodeJwt } from "jose";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
@@ -60,5 +63,59 @@ export async function updateTicketAction(
   return {
     success: true,
     message: "Talep başarıyla güncellendi.",
+  };
+}
+
+export async function createTicketAction(formData: {
+  subject: string;
+  description: string;
+  requesterName: string;
+  requesterNumber: string;
+  assignedPersonnelId: number;
+}): Promise<RecordTicketResponse | ErrorResponse> {
+  const cookieStore = await cookies();
+
+  const token = cookieStore.get("token");
+
+  if (!token) {
+    return {
+      success: false,
+      status: 401,
+      message: "Yetkisiz erişim.",
+    };
+  }
+
+  const decodedToken: DecodedToken = decodeJwt(token.value);
+
+  const res = await fetch(`${baseUrl}/api/Tickets`, {
+    method: "POST",
+    body: JSON.stringify({
+      konu: formData.subject,
+      aciklama: formData.description,
+      talebiYapanKisiAdi: formData.requesterName,
+      talebiYapanKisiNumarasi: formData.requesterNumber,
+      atananPersonelId: formData.assignedPersonnelId,
+      olusturanPersonelId: decodedToken.personalId,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token?.value}`,
+    },
+  });
+
+  if (!res.ok) {
+    const error: ErrorResponse = await res.json();
+    return {
+      success: false,
+      status: error.status,
+      message: error.message,
+    };
+  }
+
+  const data: Ticket = await res.json();
+
+  return {
+    success: true,
+    ticket: data,
   };
 }
