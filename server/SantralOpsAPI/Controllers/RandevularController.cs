@@ -43,13 +43,13 @@ public class RandevularController(SantralOpsDbContext context) : ControllerBase
     var personelVarMi = await _context.Personeller.AnyAsync(p => p.Id == randevuDto.PersonelId);
     if (!personelVarMi)
     {
-      return BadRequest("Geçersiz 'PersonelId': Bu ID'ye sahip bir personel bulunamadı.");
+      return BadRequest(new { stasus: 400, message: "Geçersiz 'PersonelId': Bu ID'ye sahip bir personel bulunamadı." });
     }
 
     var kisiVarMi = await _context.Kisiler.AnyAsync(k => k.Id == randevuDto.KisiId);
     if (!kisiVarMi)
     {
-      return BadRequest("Geçersiz 'KisiId': Bu ID'ye sahip bir kişi bulunamadı.");
+      return BadRequest(new { status:400, message: "Geçersiz 'KisiId': Bu ID'ye sahip bir kişi bulunamadı." });
     }
 
     var cakisanRandevuVarMi = await _context.Randevular
